@@ -9,7 +9,7 @@ class cell:
 
 pygame.init()
 width, height = 1280, 720
-cell_size = 6
+cell_size = 4
 grid_w, grid_h = int(width/cell_size), int(height/cell_size)
 window = pygame.display.set_mode((width, height))
 pygame.display.set_caption("game of life")
