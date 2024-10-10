@@ -8,6 +8,7 @@ Welcome to my repository of Python toy projects! 🎉 Here, you'll find a collec
 |---------------------|---------------------------------------------------------------|--------------------------------|
 | **failling_sand**   | uses simple rules to simulate sand                            | `pygame`, `colorsys`           |
 | **game_of_life**    | john conway's game of life                                    | `pygame`                       |
+| **number_predictor**| using deep learning to predict the digit drawn                | `pygame`, `pytorch`            |
 
 ## 🛠 Installation & Setup
 
@@ -17,19 +18,25 @@ Welcome to my repository of Python toy projects! 🎉 Here, you'll find a collec
     git clone https://github.com/Nyx128/python_toy_projects.git
     ```
 
-2. Install any dependencies (if applicable):
+2. go into repo directory:
+
+    ```bash
+    cd python_toy_projects
+    ```
+
+3. Install any dependencies (if applicable):
 
     ```bash
     pip install -r requirements.txt
     ```
     
-3. Navigate into the project directory of your choice:
+4. Navigate into the project directory of your choice:
 
     ```bash
     cd python_toy_projects/project-name
     ```
 
-4. Run the Python script:
+5. Run the Python script:
 
     ```bash
     python main.py
