@@ -9,6 +9,7 @@ Welcome to my repository of Python toy projects! 🎉 Here, you'll find a collec
 | **failling_sand**   | uses simple rules to simulate sand                            | `pygame`, `colorsys`           |
 | **game_of_life**    | john conway's game of life                                    | `pygame`                       |
 | **number_predictor**| using deep learning to predict the digit drawn                | `pygame`, `pytorch`            |
+|**collision_sandbox**| using verlet integration to build a simple physics engine     | `pygame`, verlet physics       |
 
 ## 🛠 Installation & Setup
 
