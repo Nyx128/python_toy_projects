@@ -21,15 +21,21 @@ def draw_objects(surf: pygame.Surface, objs: list[Object]):
     for o in objs:
         pygame.draw.circle(surf, color=WHITE, radius=o.radius, center=(o.pos.x, o.pos.y))
 
+def sample_mouse():
+    if pygame.mouse.get_pressed()[0]:
+        mouse_pos =pygame.mouse.get_pos()
+        obj = Object(Vec2(mouse_pos[0], mouse_pos[1]), 15.0)
+        obj.setVelocity(Vec2(0, 100), 1.0/60)
+        solver.objects.append(obj)
+
 while running:
     for event in pygame.event.get():
         if event.type == pygame.QUIT:
             running = False
-        if event.type == pygame.MOUSEBUTTONDOWN and event.button == 1:
-            mouse_pos = pygame.mouse.get_pos()
-            solver.objects.append(Object(Vec2(mouse_pos[0], mouse_pos[1]), 15.0))
+
 
     draw_surf.fill(BG_COL)
+    sample_mouse()
     solver.update()
     pygame.draw.circle(draw_surf, radius=solver.area_radius, center=(WIDTH/2, HEIGHT/2), color=(0, 0, 0))
     draw_objects(draw_surf, solver.objects)

@@ -38,6 +38,9 @@ class Object:
     def accelerate(self, _acc: Vec2):
         self.acc += _acc
 
+    def setVelocity(self, vel:Vec2, dt:float):
+        self.pos = self.last_pos + vel * dt
+
 
 class VerletSolver:
     def __init__(self, step: int, objs: list[Object], acenter: Vec2, arad: float):

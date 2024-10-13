@@ -11,7 +11,7 @@ class SimpleNN(nn.Module):
         self.fc3 = nn.Linear(128, 10)
 
     def forward(self, x):
-        x = x.view(-1, 28 * 28)  # Flatten the images
+        x = x.view(-1, 28 * 28)
         x = torch.relu(self.fc1(x))
         x = torch.relu(self.fc2(x))
         x = self.fc3(x)
@@ -25,7 +25,7 @@ draw_surf = pygame.Surface((height, height))
 ui_surf = pygame.Surface((width-height, height))
 window = pygame.display.set_mode((width, height))
 pygame.display.set_caption("number predictor")
-fill_col = (190, 190, 190)
+fill_col = (255, 255, 255)
 bg_col = (30, 30, 30)
 ui_bg_col = (200, 200, 200)
 BLACK = (0, 0, 0)
@@ -63,7 +63,7 @@ def predict():
     img = [[0.0 for _ in range(28)] for _ in range(28)]
     for y in range(28):
         for x in range(28):
-            img[y][x] = float(grid[x][y]) * 255.0#somehow only this works, maybe some dimension issue
+            img[y][x] = float(grid[x][y]) * 255.0#i messed up dimensions it was [row][col] and not [col][row] so i switch it
     inp_arr = np.array(img)
     inp_tensor = torch.tensor(inp_arr, dtype=torch.float32)
     inp_tensor = inp_tensor.unsqueeze(0).unsqueeze(0)
@@ -75,7 +75,7 @@ def predict():
 
 def draw_text(surface, text, position, color=(255, 255, 255)):
     text_surface = font.render(text, True, color)  # Render the text
-    surface.blit(text_surface, position)  # Blit the text onto the surface
+    surface.blit(text_surface, position)
 
 def draw_preds(preds):
     spacing = 60
