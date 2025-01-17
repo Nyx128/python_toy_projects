@@ -3,19 +3,50 @@ import torch
 import torch.nn as nn
 import numpy as np
 
-class SimpleNN(nn.Module):
-    def __init__(self):
-        super(SimpleNN, self).__init__()
-        self.fc1 = nn.Linear(28 * 28, 128)
-        self.fc2 = nn.Linear(128, 128)
-        self.fc3 = nn.Linear(128, 10)
-
-    def forward(self, x):
-        x = x.view(-1, 28 * 28)
-        x = torch.relu(self.fc1(x))
-        x = torch.relu(self.fc2(x))
-        x = self.fc3(x)
+    
+class CNN_V0(nn.Module):
+    def __init__(self, input_shape, hidden_units, output_shape):
+        super().__init__()
+        self.block_1 = nn.Sequential(
+            nn.Conv2d(in_channels=input_shape, 
+                      out_channels=hidden_units, 
+                      kernel_size=3, # how big is the square that's going over the image?
+                      stride=1, # default
+                      padding=1),# options = "valid" (no padding) or "same" (output has same shape as input) or int for specific number 
+            nn.ReLU(),
+            nn.Conv2d(in_channels=hidden_units, 
+                      out_channels=hidden_units,
+                      kernel_size=3,
+                      stride=1,
+                      padding=1),
+            nn.ReLU(),
+            nn.MaxPool2d(kernel_size=2,
+                         stride=2) # default stride value is same as kernel_size
+        )
+        self.block_2 = nn.Sequential(
+            nn.Conv2d(hidden_units, hidden_units, 3, padding=1),
+            nn.ReLU(),
+            nn.Conv2d(hidden_units, hidden_units, 3, padding=1),
+            nn.ReLU(),
+            nn.MaxPool2d(2)
+        )
+        self.classifier = nn.Sequential(
+            nn.Flatten(),
+            # Where did this in_features shape come from? 
+            # It's because each layer of our network compresses and changes the shape of our input data.
+            nn.Linear(in_features=hidden_units*7*7, 
+                      out_features=output_shape)
+        )
+    
+    def forward(self, x: torch.Tensor):
+        x = self.block_1(x)
+        # print(x.shape)
+        x = self.block_2(x)
+        # print(x.shape)
+        x = self.classifier(x)
+        # print(x.shape)
         return x
+
 
 pygame.init()
 width, height = 1280, 700
@@ -35,8 +66,8 @@ font = pygame.font.Font(None, 36)
 grid = [[0 for _ in range(28)] for _ in range(28)]
 
 device = torch.device('cuda' if torch.cuda.is_available() else 'cpu')
-model = SimpleNN()
-model.load_state_dict(torch.load('model.pth'))
+model = CNN_V0(input_shape=1, hidden_units=10, output_shape=10)
+model.load_state_dict(torch.load('number_cnn.pth'))
 model.eval()
 model = model.to(device)
 
@@ -66,7 +97,8 @@ def predict():
             img[y][x] = float(grid[x][y]) * 255.0#i messed up dimensions it was [row][col] and not [col][row] so i switch it
     inp_arr = np.array(img)
     inp_tensor = torch.tensor(inp_arr, dtype=torch.float32)
-    inp_tensor = inp_tensor.unsqueeze(0).unsqueeze(0)
+    inp_tensor = inp_tensor.reshape([1, 1, 28, 28])
+    #print(inp_tensor.shape)
 
     with torch.no_grad():
         output = model(inp_tensor)
